@@ -11,6 +11,16 @@ let todos = [
 app.get('/todos', (req, res) => {
   res.status(200).json(todos); // Send array as JSON
 });
+
+app.get('/todos/completed', (req, res) => {
+  const completed = todos.filter((t) => t.completed);
+  res.json(completed);
+});
+
+app.get('/todos/active', (req, res) => {
+  const active = todos.filter((t) => !t.completed);
+  res.status(200).json(active);
+});
 // GET One – Read by ID
 app.get('/todos/:id', (req, res) => {
   const todo = todos.find((t) => t.id === parseInt(req.params.id));
@@ -55,15 +65,6 @@ app.delete('/todos/:id', (req, res) => {
   res.status(204).send(); // Silent success
 });
 
-app.get('/todos/completed', (req, res) => {
-  const completed = todos.filter((t) => t.completed);
-  res.json(completed); // Custom Read!
-});
-// GET Active Todos
-app.get('/todos/active', (req, res) => {
-  const active = todos.filter((t) => !t.completed);
-  res.status(200).json(active);
-});
 
 app.use((err, req, res, next) => {
   res.status(500).json({ error: 'Server error!' });
